@@ -2,7 +2,6 @@ package petly.service;
 
 import org.springframework.stereotype.Service;
 import petly.model.Categoria;
-import petly.repository.CategoriaDAO;
 
 import java.util.List;
 

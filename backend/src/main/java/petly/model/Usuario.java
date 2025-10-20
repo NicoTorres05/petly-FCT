@@ -24,20 +24,22 @@ import org.antlr.v4.runtime.misc.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Entity
+@Table(name = "usuarios")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private int id;
 
     @NotNull
-    @Size()
     private String nombre;
 
     @Column(unique = true, nullable = false)
@@ -48,7 +50,13 @@ public class Usuario {
     private String direccion;
 
     @Enumerated(EnumType.STRING)
-    private UsuarioTipo tipo; // NORMAL, PREMIUM, ADMIN
+    private tipo tipo;
+
+    public enum tipo {
+        NORMAL,
+        PREMIUM,
+        ADMIN
+    }
 
 
     private BigDecimal saldo = BigDecimal.ZERO;
@@ -67,8 +75,8 @@ public class Usuario {
     //@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     //private List<Comentario> comentarios;
 
-    //@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<Compra> historialCompras;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Carrito> carritos;
 
 
 }

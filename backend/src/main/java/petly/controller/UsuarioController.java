@@ -1,7 +1,6 @@
 package petly.controller;
 
 import jakarta.validation.Valid;
-import petly.repository.UsuarioDAO;
 // import org.repaso.dto.PedidoDTO;
 import petly.model.Usuario;
 import petly.service.UsuarioService;
@@ -11,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller

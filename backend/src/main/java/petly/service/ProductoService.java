@@ -1,47 +1,52 @@
 package petly.service;
 
-import org.springframework.stereotype.Service;
 import petly.model.Producto;
-import petly.repository.ProductoDAO;
+
+import petly.exceptions.ProductNotFoundException;
+import petly.repository.ProductoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ProductoService {
 
-    private final ProductoDAO productoDAO;
+    @Autowired
+    private ProductoRepository productoRepository;
 
-    public ProductoService(ProductoDAO productoDAO) {
-        this.productoDAO = productoDAO;
+    public ProductoService(ProductoRepository productoRepository) {
+        this.productoRepository = productoRepository;
     }
 
-    public void crearProducto(Producto producto) {
-        // Regla de negocio mínima: nombre y precio obligatorio
-        if (producto.getNombre() == null || producto.getNombre().isEmpty()) {
-            throw new IllegalArgumentException("El nombre del producto es obligatorio");
-        }
-        if (producto.getPrecio() == null || producto.getPrecio().signum() <= 0) {
-            throw new IllegalArgumentException("El precio debe ser positivo");
-        }
-        productoDAO.create(producto);
+    public List<Producto> all() {
+        return this.productoRepository.findAll();
     }
 
-    public void actualizarProducto(Producto producto) {
-        productoDAO.update(producto);
+    public Producto save(Producto product) {
+        return this.productoRepository.save(product);
     }
 
-    public void eliminarProducto(int id) {
-        Producto p = productoDAO.find(id);
-        if (p != null) {
-            productoDAO.delete(p);
-        }
+    public Producto one(Long id) {
+        return this.productoRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
-    public Producto obtenerProducto(int id) {
-        return productoDAO.find(id);
+    public Producto replace(Long id, Producto product) {
+        return this.productoRepository.findById(id).map(p -> (id.equals(product.getId()) ?
+                        this.productoRepository.save(product) : null))
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
-    public List<Producto> obtenerTodos() {
-        return productoDAO.findAll();
+    public void delete(Long id) {
+        this.productoRepository.findById(id).map(p -> {
+                    this.productoRepository.delete(p);
+                    return p;
+                })
+                .orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    public List<Producto> findByCategoryId(Long categoryId) {
+        return productoRepository.findByCategoryId(categoryId);
     }
 }
