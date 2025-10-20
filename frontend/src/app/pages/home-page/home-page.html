@@ -1,0 +1,16 @@
+<h1>Bienvenido a Petly 🐾</h1>
+<p>Explora nuestros productos más populares:</p>
+
+<div *ngIf="productosDestacados.length === 0">
+  No hay productos destacados disponibles.
+</div>
+
+<div class="productos-grid">
+  <div *ngFor="let p of productosDestacados" class="producto-card">
+    <h3>{{ p.nombre }}</h3>
+    <p>{{ p.descripcion }}</p>
+    <p><strong>{{ p.precio }}</strong></p>
+    <img *ngIf="p.foto" [src]="p.foto" alt="{{ p.nombre }}" width="150">
+    <a [routerLink]="['/productos']">Ver más</a>
+  </div>
+</div>
