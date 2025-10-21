@@ -5,5 +5,6 @@
     <p>{{ producto.descripcion }}</p>
     <p class="precio">{{ producto.precio }}</p>
     <button class="btn-comprar">Comprar</button>
+    <button [routerLink]="['/productos', producto.id]">Ver detalle</button>
   </div>
 </div>

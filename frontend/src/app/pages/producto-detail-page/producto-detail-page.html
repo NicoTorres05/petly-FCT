@@ -1,1 +1,22 @@
-<p>producto-detail-page works!</p>
+<div class="producto-detail-container" *ngIf="producto">
+  <div class="producto-imagen">
+    <img [src]="'assets/' + producto.foto" alt="{{ producto.nombre }}">
+  </div>
+
+  <div class="producto-info">
+    <h1>{{ producto.nombre }}</h1>
+    <p class="descripcion">{{ producto.descripcion }}</p>
+    <p class="precio">Precio: {{ producto.precio }}</p>
+    <p *ngIf="descuentoValido" class="descuento">
+      Descuento: {{ producto?.descuento }}%
+    </p>
+
+    <p>Stock disponible: {{ producto.stock }}</p>
+
+    <button class="btn-comprar">Comprar</button>
+  </div>
+</div>
+
+<div *ngIf="!producto" class="loading">
+  Cargando producto...
+</div>

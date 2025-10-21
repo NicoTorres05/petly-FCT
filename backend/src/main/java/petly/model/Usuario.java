@@ -37,7 +37,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
-    private int id;
+    private Long id;
 
     @NotNull
     private String nombre;

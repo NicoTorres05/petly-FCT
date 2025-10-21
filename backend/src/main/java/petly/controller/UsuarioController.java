@@ -1,93 +1,75 @@
 package petly.controller;
 
 import jakarta.validation.Valid;
-// import org.repaso.dto.PedidoDTO;
+import petly.dto.UsuarioRegDTO;
 import petly.model.Usuario;
 import petly.service.UsuarioService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import petly.seguridad.config.SeguridadConfig.*;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-@Controller
-
+@Slf4j
+@RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/usuarios")
 public class UsuarioController {
-    private UsuarioService usuarioService;
+
+    private final UsuarioService usuarioService;
 
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
-    @GetMapping()
-    public String listarUsuarios(Model model) {
-        List<Usuario> listaUsuarios = usuarioService.listAll();
-        model.addAttribute("listaUsuarios", listaUsuarios);
-
-        return "usuarios/usuarios";
+    @GetMapping
+    public List<Usuario> all() {
+        log.info("Accediendo a todos los usuarios");
+        return this.usuarioService.all();
     }
 
     @GetMapping("/{id}")
-    public String detalle(Model model, @PathVariable int id) {
-        Usuario usuario = usuarioService.one(id);
-        model.addAttribute("usuario", usuario);
-
-       // List<PedidoDTO> pedidosDTO = clienteService.listPedidosDTO(id);
-       // model.addAttribute("pedidosDTO", pedidosDTO);
-
-        return "usuarios/detalles";
+    public Usuario one(@PathVariable("id") Long id) {
+        return this.usuarioService.one(id);
     }
 
-    @GetMapping("/crear")
-    public String crear(Model model) {
-        Usuario usuario = new Usuario();
-        model.addAttribute("usuario", usuario);
-
-        return "usuarios/crear";
+    @PostMapping
+    public Usuario newUsers(@RequestBody Usuario user) {
+        return this.usuarioService.save(user);
     }
 
-    @PostMapping("/crear")
-    public String submitCrear(@Valid @ModelAttribute Usuario usuario, BindingResult bindingResulted, Model model) {
-        if (bindingResulted.hasErrors()) {
-            model.addAttribute("usuario", usuario);
-
-            return "usuarios/crear";
-        }
-        usuarioService.newUsuario(usuario);
-
-        return "/usuarios";
+    @PutMapping("/{id}")
+    public Usuario replaceUsers(@PathVariable("id") Long id, @RequestBody Usuario user) {
+        return this.usuarioService.replace(id, user);
     }
 
-    @GetMapping("/editar/{id}")
-    public String editar(Model model, @PathVariable Integer id) {
-
-        Usuario usuario = usuarioService.one(id);
-        model.addAttribute("usuario", usuario);
-
-        return "usuarios/editar";
-
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void deleteUsers(@PathVariable("id") Long id) {
+        this.usuarioService.delete(id);
     }
 
-    @PostMapping("/editar/{id}")
-    public String submitEditar(@Valid @ModelAttribute Usuario usuario, BindingResult bindingResulted, @PathVariable Integer id, Model model) {
-        if (bindingResulted.hasErrors()) {
-            model.addAttribute("usuario", usuario);
-            model.addAttribute("id", id);
-
-            return "/usuarios/editar";
-        }
-        usuarioService.updateUsuario(usuario);
-
-        return "/usuarios";
+    @PostMapping("/register")
+    public ResponseEntity<Usuario> register(@Valid @RequestBody UsuarioRegDTO registerFullUserDTO) throws IOException {
+        Usuario registered = usuarioService.register(registerFullUserDTO);
+        return ResponseEntity.ok(registered);
     }
 
-    @PostMapping("/borrar/{id}")
-    public RedirectView borrar(@PathVariable Integer id) {
-        usuarioService.deleteUsuario(id);
 
-        return new RedirectView("/usuarios");
-    }
+    //TODO /login
+
+    //TODO /logout
+
 }

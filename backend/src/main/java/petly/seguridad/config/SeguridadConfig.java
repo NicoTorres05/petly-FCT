@@ -26,6 +26,13 @@ import petly.seguridad.jwt.JwtAuthenticationFilter;
 public class SeguridadConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
 
+
+    public record LoginResponse(String token, String name, String email) {
+    }
+
+    public record LoginDTO(String email, String password) {
+    }
+
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

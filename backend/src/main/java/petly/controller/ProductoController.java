@@ -1,54 +1,67 @@
 package petly.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 import petly.model.Producto;
 import petly.model.Usuario;
 import petly.service.ProductoService;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
+@Slf4j
 @RestController
-@RequestMapping("/api/productos")
 @CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/productos")
 public class ProductoController {
 
-    private final ProductoService productoService;
+    @Autowired
+    private ProductoService productoService;
 
     public ProductoController(ProductoService productoService) {
         this.productoService = productoService;
     }
 
-    // Listar todos
     @GetMapping
-    public List<Producto> getAllProductos() {
-        return productoService.findAll();
+    public List<Producto> all(@RequestParam(required = false) Long categoriaId) {
+        if (categoriaId != null) {
+            log.info("Accediendo a productos de la categoría con ID: " + categoriaId);
+            return this.productoService.findByCategoryId(categoriaId);
+        }
+        log.info("Accediendo a todos los productos");
+        return this.productoService.all();
     }
 
-    // Obtener uno
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> getProducto(@PathVariable int id) {
-        Producto producto = productoService.find(id);
-        if (producto != null) {
-            return ResponseEntity.ok(producto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public Producto one(@PathVariable("id") Long id) {
+        return this.productoService.one(id);
     }
 
+    @PostMapping
+    public Producto newProducto(@RequestBody Producto producto) {
+        return this.productoService.save(producto);
+    }
 
-
-    // Editar producto
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> updateProducto(@PathVariable int id, @RequestBody Producto producto) {
-        Producto actualizado = productoService.update(id, producto);
-        if (actualizado != null) {
-            return ResponseEntity.ok(actualizado);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public Producto replace(@PathVariable("id") Long id, @RequestBody Producto producto) {
+        return this.productoService.replace(id, producto);
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void deleteProducto(@PathVariable("id") Long id) {
+        this.productoService.delete(id);
+    }
+
+    @GetMapping("/por-categoria")
+    public List<Producto> getProductsByCategory(@RequestParam(required = false) Long categoriaId) {
+        if (categoriaId != null) {
+            return productoService.findByCategoryId(categoriaId);
+        }
+        return productoService.all();
+    }
 
 }
