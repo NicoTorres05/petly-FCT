@@ -46,7 +46,7 @@ public class ProductoService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
-    public List<Producto> findByCategoryId(Long categoryId) {
-        return productoRepository.findByCategoryId(categoryId);
+    public List<Producto> findByCategoriaId(Long id) {
+        return productoRepository.findByCategoriaId(id);
     }
 }

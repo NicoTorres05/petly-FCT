@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { ActivatedRoute } from '@angular/router';
 import { ProductoService } from '../../services/producto.service';
 import { Producto } from '../../models/producto.model';
 
@@ -17,22 +17,27 @@ import { Producto } from '../../models/producto.model';
 export class ProductosPageComponent implements OnInit {
   productos: Producto[] = [];
 
-  constructor(private productoService: ProductoService) {}
+  constructor(private route: ActivatedRoute, private productoService: ProductoService) {}
 
   ngOnInit(): void {
-    this.cargarProductos();
+    this.route.queryParams.subscribe(params => {
+      const categoriaId = params['categoriaId'];
+      console.log('categoriaId recibido:', categoriaId);
+      this.cargarProductos(categoriaId ? Number(categoriaId) : undefined);
+    });
   }
 
-  cargarProductos(): void {
-    this.productoService.getAll().subscribe({
+  cargarProductos(categoriaId?: number): void {
+    this.productoService.getAll(categoriaId).subscribe({
       next: (data) => {
         this.productos = data;
         console.log('Productos cargados:', data);
       },
       error: (err) => {
-        console.error('Error cargando productos', err)
+        console.error('Error cargando productos', err);
       }
     });
   }
+
 }
 

@@ -10,5 +10,5 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, RouterModule]
 })
 export class NavbarComponent {
-  // Aquí puedes agregar lógica futura, como mostrar el nombre del usuario logueado
+
 }

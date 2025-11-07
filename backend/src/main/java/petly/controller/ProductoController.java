@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/productos")
+@RequestMapping("/api/productos")
 public class ProductoController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class ProductoController {
     public List<Producto> all(@RequestParam(required = false) Long categoriaId) {
         if (categoriaId != null) {
             log.info("Accediendo a productos de la categoría con ID: " + categoriaId);
-            return this.productoService.findByCategoryId(categoriaId);
+            return this.productoService.findByCategoriaId(categoriaId);
         }
         log.info("Accediendo a todos los productos");
         return this.productoService.all();
@@ -56,12 +56,5 @@ public class ProductoController {
         this.productoService.delete(id);
     }
 
-    @GetMapping("/por-categoria")
-    public List<Producto> getProductsByCategory(@RequestParam(required = false) Long categoriaId) {
-        if (categoriaId != null) {
-            return productoService.findByCategoryId(categoriaId);
-        }
-        return productoService.all();
-    }
 
 }

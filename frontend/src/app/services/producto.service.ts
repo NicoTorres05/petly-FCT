@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams  } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Producto } from '../models/producto.model';
 
@@ -9,12 +9,37 @@ export class ProductoService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.apiUrl);
+  private baseUrl = 'http://localhost:8080/categoria';
+
+  getAll(categoriaId?: number): Observable<Producto[]> {
+    let params = new HttpParams();
+    if (categoriaId) {
+      params = params.set('categoriaId', categoriaId.toString());
+      return this.http.get<Producto[]>(this.apiUrl, {params});
+    } else {
+      return this.http.get<Producto[]>(this.apiUrl);
+    }
+  }
+
+  create(producto: Producto): Observable<Producto> {
+    return this.http.post<Producto>(this.apiUrl, producto);
   }
 
   find(id: number): Observable<Producto> {
     return this.http.get<Producto>(`${this.apiUrl}/${id}`);
   }
+
+  delete(id: number): Observable<Producto> {
+    return this.http.delete<Producto>(`${this.apiUrl}/${id}`);
+  }
+
+  update(id: number, producto: Producto): Observable<Producto> {
+    return this.http.put<Producto>(`${this.apiUrl}/${id}`, producto);
+  }
+
+
+
+
+
 
 }

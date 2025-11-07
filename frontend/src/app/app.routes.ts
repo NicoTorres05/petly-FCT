@@ -1,11 +1,18 @@
 import { HomePageComponent } from './pages/home-page/home-page';
 import { ProductosPageComponent } from './pages/productos-page/productos-page';
 import { ProductoDetailPage } from './pages/producto-detail-page/producto-detail-page'
+import { ProductoEditPage } from './pages/producto-edit-page/producto-edit-page'
+import { ProductoCreatePage } from './pages/producto-create-page/producto-create-page'
 
 export const routes = [
   { path: '', component: HomePageComponent },
   { path: 'productos', component: ProductosPageComponent },
+  { path: 'productos/crear', component: ProductoCreatePage },
+  { path: 'productos/editar/:id', component: ProductoEditPage },
   { path: 'productos/:id', component: ProductoDetailPage },
+  { path: 'categorias/productos', component: ProductosPageComponent },
+
+
 
   { path: '**', redirectTo: '' }
 ];

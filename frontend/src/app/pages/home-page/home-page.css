@@ -1,0 +1,178 @@
+/* Estilos personalizados */
+body {
+  margin: 0;
+}
+
+.welcome-section {
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.highlight-section {
+  padding: 60px 20px;
+}
+
+.info-section {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 80px 20px;
+  align-items: center;
+  background-color: #cfcfcf;
+}
+
+.info-section .text {
+  flex: 0 0 60%;
+  max-width: 60%;
+  padding-right: 20px;
+}
+
+.info-section .image {
+  flex: 0 0 40%;
+  max-width: 40%;
+}
+.image img {
+  height: 500px;
+  object-fit: cover;
+}
+
+.info-section img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .info-section .text, .info-section .image {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+}
+
+#welcome {
+  height: 80vh;
+  color: white;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('../../../assets/backgrounds/Pets.png');
+  background-size: cover;
+  background-position: center;
+}
+
+#btns {
+  background-color: #b11ecc;
+  border: none;
+}
+
+#btns:hover {
+  background-color: #560e66;
+}
+
+
+h1 {
+  font-size: 80px;
+}
+
+h2 {
+  font-size: 50px;
+}
+
+p {
+  font-size: 25px;
+}
+
+/* Sección general */
+.highlight-section {
+  background: linear-gradient(180deg, #1a1a1a 0%, #2b2b2b 100%);
+  padding: 60px 0;
+  color: #fff;
+}
+
+.highlight-section h2 {
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+/* Carrusel */
+.carousel {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.carousel-item img {
+  height: 400px;
+  object-fit: cover;
+  filter: brightness(0.75);
+  transition: transform 0.6s ease-in-out;
+}
+
+.carousel-item.active img {
+  transform: scale(1.05);
+}
+
+/* Texto dentro del carrusel */
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.45);
+  padding: 20px 30px;
+  border-radius: 12px;
+  bottom: 40px;
+  transition: background 0.3s ease;
+}
+
+.carousel-caption:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.carousel-caption h5 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffcc00;
+}
+
+.carousel-caption p {
+  font-size: 1rem;
+  color: #f1f1f1;
+  margin-top: 8px;
+}
+
+/* Botones de navegación */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .carousel-item img {
+    height: 280px;
+  }
+
+  .carousel-caption {
+    bottom: 20px;
+    padding: 15px;
+  }
+
+  .carousel-caption h5 {
+    font-size: 1.2rem;
+  }
+
+  .carousel-caption p {
+    font-size: 0.9rem;
+  }
+}

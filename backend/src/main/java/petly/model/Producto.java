@@ -1,5 +1,7 @@
 package petly.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,11 +35,10 @@ public class Producto {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
+    @JsonIgnoreProperties("productos")
     private Categoria categoria;
 
-    // @ManyToOne
-    // @JoinColumn(name = "mascota_id")
-    // private Mascota tipoAnimal;
+
 
     @Positive
     private BigDecimal precio;
@@ -45,6 +46,8 @@ public class Producto {
     private Integer stock;
 
     private int descuento;
+
+    private int ventas;
 
     private LocalDateTime fechaCreacion = LocalDateTime.now();
 

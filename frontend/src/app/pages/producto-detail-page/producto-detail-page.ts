@@ -2,20 +2,27 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { ProductoService } from '../../services/producto.service';
 import { Producto } from '../../models/producto.model';
+import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Categoria } from '../../models/categoria.model';
+import { CategoriaService } from '../../services/categoria.service'
 
 @Component({
   selector: 'app-producto-detail-page',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    TranslateModule
+  ],
   templateUrl: './producto-detail-page.html',
   standalone: true,
   styleUrls: ['./producto-detail-page.css']
 })
 export class ProductoDetailPage implements OnInit {
 
-  producto!: Producto;  // objeto individual
+  producto!: Producto;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,10 +33,7 @@ export class ProductoDetailPage implements OnInit {
     this.loadProducto();
   }
 
-  get descuentoValido(): boolean {
-    // @ts-ignore
-    return this.producto ? this.producto.descuento > 0 : false;
-  }
+ // TODO sistema de descuento
 
 
   loadProducto(): void {

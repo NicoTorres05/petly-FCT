@@ -1,5 +1,6 @@
 package petly.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,8 +30,8 @@ public class Categoria {
     @Size(max = 500)
     private String descripcion;
 
-    private String imagen;
 
+    @JsonIgnoreProperties("categoria")
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Producto> productos;
 

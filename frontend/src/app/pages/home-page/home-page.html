@@ -1,16 +1,76 @@
-<h1>Bienvenido a Petly 🐾</h1>
-<p>Explora nuestros productos más populares:</p>
+<body>
 
-<div *ngIf="productosDestacados.length === 0">
-  No hay productos destacados disponibles.
-</div>
+<!-- Sección de bienvenida -->
+<section id="welcome" class="welcome-section">
+  <h1>Bienvenido a Petly</h1>
+  <p>La tienda online donde encontrarás todo lo que tu mascota necesita: comida, juguetes, accesorios y mucho más.<br>
+    Explora nuestras categorías y descubre productos especialmente seleccionados para consentir a tu compañero peludo.</p>
+  <a id="btns" href="productos" class="btn btn-primary btn-lg mt-3">Ver productos</a>
+</section>
 
-<div class="productos-grid">
-  <div *ngFor="let p of productosDestacados" class="producto-card">
-    <h3>{{ p.nombre }}</h3>
-    <p>{{ p.descripcion }}</p>
-    <p><strong>{{ p.precio }}</strong></p>
-    <img *ngIf="p.foto" [src]="p.foto" alt="{{ p.nombre }}" width="150">
-    <a [routerLink]="['/productos']">Ver más</a>
+<!-- Sección de productos destacados con carrusel -->
+<section class="highlight-section" id="destacados">
+  <div class="container">
+    <h2 class="mb-4 text-center color-white">Busca tu Mascota</h2>
+
+    <div id="carouselExampleIndicators" class="carousel slide">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <a [routerLink]="['/categorias/productos']" [queryParams]="{ categoriaId: 4 }"><img src="assets/animals/dog.jpg" class="d-block w-100" alt="Dog"></a>
+        </div>
+        <div class="carousel-item">
+          <a [routerLink]="['/categorias/productos']" [queryParams]="{ categoriaId: 5 }"><img src="assets/animals/cat.jpg" class="d-block w-100" alt="Cat"></a>
+        </div>
+        <div class="carousel-item">
+          <a [routerLink]="['/categorias/productos']" [queryParams]="{ categoriaId: 6 }"><img src="assets/animals/hamster.jpg" class="d-block w-100" alt="Hamster"></a>
+        </div>
+        <div class="carousel-item">
+          <a [routerLink]="['/categorias/productos']" [queryParams]="{ categoriaId: 7 }"><img src="assets/animals/rabbit.jpg" class="d-block w-100" alt="Rabbit"></a>
+        </div>
+        <div class="carousel-item">
+          <a [routerLink]="['/categorias/productos']" [queryParams]="{ categoriaId: 9 }"><img src="assets/animals/fish.jpg" class="d-block w-100" alt="Fish"></a>
+        </div>
+        <div class="carousel-item">
+          <a [routerLink]="['/categorias/productos']" [queryParams]="{ categoriaId: 8 }"><img src="assets/animals/bird.png" class="d-block w-100" alt="Bird"></a>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+
   </div>
-</div>
+</section>
+
+
+<!-- Sección de información con imagen a la derecha -->
+<section class="info-section">
+  <div class="text">
+    <h2>Cuida y consiente a tu mascota</h2>
+    <p>En Petly no solo vendemos productos, sino que ofrecemos soluciones para el bienestar de tus mascotas.
+      Desde alimentación saludable hasta juguetes que estimulan su mente y cuerpo, tenemos todo lo que necesitas para que tu compañero peludo esté feliz y saludable.</p>
+    <p>Además, ofrecemos guías y consejos para el cuidado diario de tus mascotas, garantizando que cada compra mejore su calidad de vida.</p>
+    <a href="productos" class="btn btn-outline-primary mt-3">Explora nuestros productos</a>
+  </div>
+  <div class="image">
+    <img src="assets/backgrounds/cat-happy.jpg" alt="Mascota feliz">
+  </div>
+</section>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>

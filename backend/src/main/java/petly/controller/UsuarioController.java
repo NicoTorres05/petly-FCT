@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import petly.dto.UsuarioRegDTO;
 import petly.model.Usuario;
 import petly.service.UsuarioService;
-import petly.seguridad.config.SeguridadConfig.*;
+import petly.seguridad.jwt.SecurityConfig.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

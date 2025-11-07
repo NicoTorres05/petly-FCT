@@ -1,1 +1,51 @@
-<p>producto-edit-page works!</p>
+<div *ngIf="producto; else cargando">
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+
+    <!-- Nombre -->
+    <label for="name">Nombre del producto:</label>
+    <input type="text" id="name" formControlName="nombre">
+
+    <!-- Descripción -->
+    <label for="desc">Descripción del producto:</label>
+    <textarea id="desc" formControlName="descripcion"></textarea>
+
+    <!-- Imagen -->
+    <label for="img">Imagen del producto:</label>
+    <input type="file" id="img" accept="image/*">
+    <div *ngIf="productForm.get('foto')?.value">
+      <h3>Imagen seleccionada:</h3>
+      <img [src]="'assets/' + productForm.get('foto')?.value" [alt]="productForm.get('nombre')?.value" style="max-width: 300px; max-height: 300px">
+    </div>
+
+    <!-- Categoría -->
+    <label for="categ">Categoría del producto:</label>
+    <select id="categ" formControlName="categoria">
+      <option *ngFor="let cat of categorias" [value]="cat.id">
+        {{ cat.nombre }}
+      </option>
+    </select>
+
+    <!-- Precio -->
+    <label for="price">Precio (€)</label>
+    <input type="number" id="price" formControlName="precio" min="0" step="0.01">
+
+    <!-- Stock -->
+    <label for="stock">Stock inicial:</label>
+    <input type="number" id="stock" formControlName="stock" min="0" step="5">
+
+    <!-- Descuento -->
+    <label for="discount">Descuento:</label>
+    <input type="number" id="discount" formControlName="descuento" min="0" step="2">
+
+    <!-- Botones -->
+    <div class="buttons">
+      <button type="submit" [disabled]="productForm.invalid">Guardar</button>
+      <button class="delete" type="button" (click)="eliminarProducto()">Eliminar</button>
+    </div>
+
+  </form>
+</div>
+
+<ng-template #cargando>
+  <div class="loading">Cargando producto...</div>
+</ng-template>

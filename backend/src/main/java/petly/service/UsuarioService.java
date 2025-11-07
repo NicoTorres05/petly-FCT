@@ -10,7 +10,7 @@ import petly.exceptions.UserNotFoundException;
 import petly.model.Usuario;
 import petly.dto.UsuarioRegDTO;
 import petly.repository.UsuarioRepository;
-import petly.seguridad.config.SeguridadConfig;
+import petly.seguridad.jwt.SecurityConfig;
 
 import java.util.List;
 

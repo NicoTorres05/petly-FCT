@@ -2,30 +2,36 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #3a7bd5;
+  background-color: #b11ecc;
   color: white;
   padding: 10px 20px;
+  width: 100%; /* Fuerza que ocupe todo el ancho de la ventana */
+  margin: 0;     /* Quita margen externo del navbar */
+  box-sizing: border-box;
 }
 
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 15px;
+  width: 100%; /* que ocupe todo el navbar */
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li {
+  flex: 1; /* cada link ocupa el mismo espacio */
+  text-align: center; /* centra el texto dentro de cada li */
 }
 
 .nav-links li a {
   color: white;
   text-decoration: none;
   font-weight: bold;
+  display: block; /* para que ocupe todo el li */
+  padding: 10px 0; /* un poco de altura para el navbar */
+  font-size: 2rem;
 }
 
 .nav-links li a:hover {
   text-decoration: underline;
-}
-
-.logo a {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-decoration: none;
 }
