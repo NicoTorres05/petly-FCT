@@ -6,7 +6,7 @@ export interface UsuarioModel {
   direccion?: string;
   telefono?: string;
   pfp?: string; // foto de perfil
-  tipo: 'NORMAL' | 'PREMIUM' | 'ADMIN';
+  tipo?: string;
   saldo: number;
   preferencias?: string[]; // lista de tipos de productos/animales que le interesan
   // comentarios?: Comentario[]; // si los comentarios son otra entidad

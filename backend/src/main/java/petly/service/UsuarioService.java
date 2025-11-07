@@ -11,6 +11,7 @@ import petly.model.Usuario;
 import petly.dto.UsuarioRegDTO;
 import petly.repository.UsuarioRepository;
 import petly.seguridad.jwt.SecurityConfig;
+import petly.service.TokenService;
 
 import java.util.List;
 
@@ -19,10 +20,14 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenService tokenService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
     public List<Usuario> all() {
@@ -63,6 +68,14 @@ public class UsuarioService {
         user.setTipo(Usuario.tipo.valueOf(dto.getTipo()));
 
         return usuarioRepository.save(user);
+    }
+
+    public SecurityConfig.LoginResponse authenticate(SecurityConfig.LoginDTO input) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(input.email(), input.password()));
+        Usuario user = (Usuario) authentication.getPrincipal();
+        String token = tokenService.generateToken(authentication, null); // Genera un nuevo token, el segundo parámetro es el token actual (null en este caso)
+        return new SecurityConfig.LoginResponse(token, user.getNombre(), user.getEmail());
     }
 
 
