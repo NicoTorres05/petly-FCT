@@ -3,6 +3,7 @@ import { ProductosPageComponent } from './pages/productos-page/productos-page';
 import { ProductoDetailPage } from './pages/producto-detail-page/producto-detail-page'
 import { ProductoEditPage } from './pages/producto-edit-page/producto-edit-page'
 import { ProductoCreatePage } from './pages/producto-create-page/producto-create-page'
+import { Register } from './pages/register/register'
 
 export const routes = [
   { path: '', component: HomePageComponent },
@@ -11,6 +12,7 @@ export const routes = [
   { path: 'productos/editar/:id', component: ProductoEditPage },
   { path: 'productos/:id', component: ProductoDetailPage },
   { path: 'categorias/productos', component: ProductosPageComponent },
+  { path: 'usuarios/registro', component: Register},
 
 
 
