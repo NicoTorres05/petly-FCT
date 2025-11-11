@@ -10,7 +10,7 @@
         <input id="email" type="email" formControlName="email" placeholder="Email"
                [class.invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
         <div class="error" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-          {{ 'LOGIN.ERROR_INVALID_EMAIL' | translate }}
+          Email no válido
         </div>
       </div>
       <div class="form-group">
@@ -19,10 +19,10 @@
                placeholder="Contraseña"
                [class.invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" />
         <div class="error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-          {{ 'LOGIN.ERROR_PASSWORD_REQUIRED' | translate }}
+          Contraseña requerida
         </div>
       </div>
-      <button type="submit" class="btn-submit">{{ 'LOGIN.BUTTON_SUBMIT' | translate }}</button>
+      <button type="submit" class="btn-submit">Aceptar</button>
     </form>
   </div>
 </div>

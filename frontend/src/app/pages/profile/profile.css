@@ -1,0 +1,33 @@
+.perfil {
+  max-width: 400px;
+  margin: 3rem auto;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  text-align: left;
+}
+
+.perfil h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.perfil-info p {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: #444;
+}
+
+strong {
+  color: #222;
+}
+
+.no-user {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  color: #666;
+}

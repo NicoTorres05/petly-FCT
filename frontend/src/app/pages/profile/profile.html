@@ -1,0 +1,14 @@
+<div *ngIf="usuario; else noUser" class="perfil">
+  <h2>Perfil del Usuario</h2>
+  <div class="perfil-info">
+    <p><strong>Nombre:</strong> {{ usuario.name || '—' }}</p>
+    <p><strong>Email:</strong> {{ usuario.sub || usuario.email || '—' }}</p>
+    <p><strong>Rol:</strong> {{ usuario.role || '—' }}</p>
+  </div>
+</div>
+
+<ng-template #noUser>
+  <div class="no-user">
+    <p>No hay usuario logueado.</p>
+  </div>
+</ng-template>

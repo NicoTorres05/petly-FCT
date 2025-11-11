@@ -53,4 +53,16 @@ export class TokenService {
     loggedIn(): boolean {
         return !!this.get(); // Devuelve true si hay un token almacenado
     }
+
+  getUserData(): any {
+    const token = this.get();
+    if (!token) return null;
+
+    const payload = this.payload(token);
+    if (!payload) return null;
+
+    // Devuelve el payload completo (contiene datos como email, roles, etc.)
+    return payload;
+  }
+
 }
