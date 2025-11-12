@@ -1,0 +1,25 @@
+<div class="editar-perfil">
+  <h2>Editar Perfil</h2>
+  <form [formGroup]="perfilForm" (ngSubmit)="submit()">
+
+    <label for="nombre">Nombre</label>
+    <input id="nombre" formControlName="nombre" type="text">
+    <div class="error" *ngIf="perfilForm.get('nombre')?.touched && perfilForm.get('nombre')?.invalid">
+      El nombre es obligatorio.
+    </div>
+
+    <label for="email">Email</label>
+    <input id="email" formControlName="email" type="email">
+    <div class="error" *ngIf="perfilForm.get('email')?.touched && perfilForm.get('email')?.invalid">
+      Email inválido.
+    </div>
+
+    <label for="direccion">Dirección</label>
+    <input id="direccion" formControlName="direccion" type="text">
+
+    <label for="telefono">Teléfono</label>
+    <input id="telefono" formControlName="telefono" type="text">
+
+    <button type="submit">Guardar cambios</button>
+  </form>
+</div>

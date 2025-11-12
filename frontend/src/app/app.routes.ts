@@ -6,6 +6,8 @@ import { ProductoCreatePage } from './pages/producto-create-page/producto-create
 import { Register } from './pages/register/register'
 import { Login } from './pages/login/login'
 import { Profile } from './pages/profile/profile'
+import { AuthGuard } from './guard/auth.guard';
+import { EditProfileData } from './pages/edit-profile-data/edit-profile-data'
 
 export const routes = [
   { path: '', component: HomePageComponent },
@@ -16,7 +18,8 @@ export const routes = [
   { path: 'categorias/productos', component: ProductosPageComponent },
   { path: 'usuarios/registro', component: Register},
   { path: 'usuarios/login', component: Login},
-  { path: 'usuarios/profile', component: Profile},
+  { path: 'usuarios/profile', component: Profile, canActivate: [AuthGuard]},
+  { path: 'usuarios/profile/edit', component: EditProfileData, canActivate: [AuthGuard]},
 
 
 

@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import petly.dto.UsuarioLogDTO;
 import petly.exceptions.UserNotFoundException;
 import petly.model.Usuario;
 import petly.dto.UsuarioRegDTO;
@@ -29,6 +30,18 @@ public class UsuarioService {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
     }
+
+    public Usuario updateUser(String username, Usuario dto) {
+        Usuario user = usuarioRepository.findByEmail(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        user.setNombre(dto.getNombre());
+        user.setDireccion(dto.getDireccion());
+        user.setTelefono(dto.getTelefono());
+
+        return usuarioRepository.save(user);
+    }
+
 
     public List<Usuario> all() {
         return this.usuarioRepository.findAll();
@@ -62,10 +75,10 @@ public class UsuarioService {
         user.setNombre(dto.getNombre());
         user.setEmail(dto.getEmail());
         user.setEmail(dto.getEmail());
+        user.setTipo(Usuario.tipo.NORMAL);
         // Ciframos la contraseña antes de guardar:
         user.setContrasena(passwordEncoder.encode(dto.getContrasena()));
         // Convertimos el String a tu enum Roles (asegúrate de que coincide):
-        user.setTipo(Usuario.tipo.valueOf(dto.getTipo()));
 
         return usuarioRepository.save(user);
     }
@@ -77,6 +90,4 @@ public class UsuarioService {
         String token = tokenService.generateToken(authentication, null); // Genera un nuevo token, el segundo parámetro es el token actual (null en este caso)
         return new SecurityConfig.LoginResponse(token, user.getNombre(), user.getEmail());
     }
-
-
 }

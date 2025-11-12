@@ -12,6 +12,7 @@ export class AuthService {
   tokenService = inject(TokenService);
   private url = environment.apiUrl;
   private tokenKey = 'authToken';
+  private baseUrl = 'http://localhost:8080/usuarios';
 
 
   private loggedIn = new BehaviorSubject<boolean>(this.tokenService.loggedIn());
@@ -21,7 +22,7 @@ export class AuthService {
 
   login(form: Object): Observable<any> {
     // envía los datos del form login al backend
-    return this.http.post(`${this.url}/usuarios/login`, form).pipe(
+    return this.http.post(`${this.url}/login`, form).pipe(
       tap((response: any) => {
         if (response.token) {
           // guarda token en almacenamiento local
@@ -33,14 +34,15 @@ export class AuthService {
     )
   }
 
-  me(token: { token: string }): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token.token}`
-    });
 
-    // Llama al endpoint del backend que devuelve los datos del usuario actual
-    return this.http.get(`${this.url}/usuarios/me`, { headers });
+  me(): Observable<any> {
+    const token = this.tokenService.get();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.get(`${this.baseUrl}/me`, { headers });
   }
+
 
 
   logout(): void {
@@ -59,7 +61,7 @@ export class AuthService {
       };
 
       // envía POST al backend para cerrar sesión
-      this.http.post(`${this.url}/usuarios/logout`, {}, httpOptions).subscribe({
+      this.http.post(`${this.url}/logout`, {}, httpOptions).subscribe({
         next: () => {
           console.log('Sesión cerrada en el backend');
         },
@@ -82,7 +84,7 @@ export class AuthService {
 
   register(form: Object): Observable<any> {
     // datos registro al backend
-    return this.http.post(`${this.url}/usuarios/register`, form).pipe(
+    return this.http.post(`${this.url}/register`, form).pipe(
       tap((response: any) => {
         if (response.token) {
           this.tokenService.set(response.token);
@@ -103,6 +105,17 @@ export class AuthService {
     this.loggedIn.next(value);
   }
 
+  updateUser(data: any): Observable<any> {
+    const token = this.tokenService.get();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.put(`${this.baseUrl}/me`, data, { headers });
+  }
+
+
+
+
   getUserData(): Observable<any> {
     // obtiene el token
     const token = localStorage.getItem('authToken');
@@ -112,14 +125,13 @@ export class AuthService {
     }
 
     try {
-      // decodifica el token para info del usuario
       const payload = JSON.parse(atob(token.split('.')[1]));
       const userId = payload.id;
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`
       });
       // pide los datos del usuario usando ID
-      return this.http.get(`${this.url}/usuarios/${userId}`, { headers });
+      return this.http.get(`${this.url}/${userId}`, { headers });
     } catch (error) {
       console.error('Error al decodificar el token:', error);
       return of(null);

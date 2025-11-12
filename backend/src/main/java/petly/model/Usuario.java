@@ -9,11 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -43,6 +39,8 @@ public class Usuario implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String email;
+
+    private Integer telefono;
 
     private String contrasena;
 
@@ -80,7 +78,6 @@ public class Usuario implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Asumiendo que tu enum tipo define roles
         return Set.of(new SimpleGrantedAuthority(tipo.name()));
     }
 
@@ -119,7 +116,4 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
-
 }

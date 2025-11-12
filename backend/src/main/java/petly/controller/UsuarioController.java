@@ -1,8 +1,12 @@
 package petly.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import petly.dto.UsuarioLogDTO;
 import petly.dto.UsuarioRegDTO;
 import petly.model.Usuario;
+import petly.service.TokenBlacklistService;
 import petly.service.UsuarioService;
 import petly.seguridad.jwt.SecurityConfig.*;
 
@@ -28,9 +32,11 @@ import java.util.UUID;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final TokenBlacklistService tokenBlacklistService;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService, TokenBlacklistService tokenBlacklistService) {
         this.usuarioService = usuarioService;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @GetMapping
@@ -39,7 +45,30 @@ public class UsuarioController {
         return this.usuarioService.all();
     }
 
-    @GetMapping("/{id}")
+    @PostMapping("/register")
+    public ResponseEntity<Usuario> register(@Valid @RequestBody UsuarioRegDTO registerFullUserDTO) throws IOException {
+        Usuario registered = usuarioService.register(registerFullUserDTO);
+        return ResponseEntity.ok(registered);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginDTO loginUserDTO) {
+        LoginResponse loginResponse = usuarioService.authenticate(loginUserDTO);
+
+        return ResponseEntity.ok(loginResponse);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            tokenBlacklistService.blacklistToken(token);
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id:[0-9]+}")
     public Usuario one(@PathVariable("id") Long id) {
         return this.usuarioService.one(id);
     }
@@ -49,22 +78,29 @@ public class UsuarioController {
         return this.usuarioService.save(user);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id:[0-9]+}")
     public Usuario replaceUsers(@PathVariable("id") Long id, @RequestBody Usuario user) {
         return this.usuarioService.replace(id, user);
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:[0-9]+}")
     public void deleteUsers(@PathVariable("id") Long id) {
         this.usuarioService.delete(id);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Usuario> register(@Valid @RequestBody UsuarioRegDTO registerFullUserDTO) throws IOException {
-        Usuario registered = usuarioService.register(registerFullUserDTO);
-        return ResponseEntity.ok(registered);
+
+
+    @GetMapping("/me")
+    public ResponseEntity<Usuario> getCurrentUser(@AuthenticationPrincipal Usuario usuario) {
+        return ResponseEntity.ok(usuario);
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<Usuario> updateMe(@RequestBody Usuario dto, Authentication auth) {
+        Usuario user = usuarioService.updateUser(auth.getName(), dto);
+        return ResponseEntity.ok(user);
     }
 
 

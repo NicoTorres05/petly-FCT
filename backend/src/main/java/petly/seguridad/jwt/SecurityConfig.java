@@ -55,46 +55,29 @@ public class SecurityConfig {
         return source;
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(ar -> ar.anyRequest().permitAll());
-        return http.build();
-    }
 
-    /**
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtBlacklistLogoutHandler logoutHandler) throws Exception {
         http
-                .cors(Customizer.withDefaults()) // Habilita CORS globalmente para evitar errores de Frontend
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(ar -> ar
-                        .requestMatchers(HttpMethod.POST, "/users/login", "/users/register").permitAll()
-                        // Opcional: si quieres permitir GET público de usuarios:
-                        .requestMatchers(HttpMethod.GET, "/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/categorias/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/productos/create").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/categorias/create").permitAll()
-
-                        // Todo lo demás requiere token
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.POST, "/usuarios/login", "/usuarios/register").permitAll()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Habilita validación de JWT en cada petición
-
-                // Habilito el logout
                 .logout(logout -> logout
-                        .logoutUrl("/users/logout")
+                        .logoutUrl("/usuarios/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK))
                 )
-                .oauth2ResourceServer(rs -> rs.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer(rs -> rs.jwt(Customizer.withDefaults())); // ✅ JWT activado
         return http.build();
     }
-**/
+
+
     @Bean
     public JwtDecoder jwtDecoder(TokenBlackListService tokenBlacklistService) {
         return new JwtDecoderC(NimbusJwtDecoder.withSecretKey(jwtConfig.getSecretKey()).build(), tokenBlacklistService);

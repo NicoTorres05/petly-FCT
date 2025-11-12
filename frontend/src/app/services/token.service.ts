@@ -24,24 +24,26 @@ export class TokenService {
         localStorage.removeItem(this.tokenKey);
     }
 
-    isValid() {
-        const token = this.get();
-        if (token) {
-            const payload = this.payload(token);
+  isValid(): boolean {
+    const token = this.get();
+    if (token) {
+      const payload = this.payload(token);
+      if (payload) {
+        const isIssuerValid = payload.iss === 'http://localhost:8080';
+        const isNotExpired = payload.exp > Math.floor(Date.now() / 1000);
 
-            /* console.log(payload); */
-
-            if (payload) {
-                const isIssuerValid = payload.iss === 'http://localhost:8080';
-                const isNotExpired = payload.exp > Math.floor(Date.now() / 1000);
-
-                return isIssuerValid && isNotExpired;
-            }
+        if (isIssuerValid && isNotExpired) {
+          return true;
+        } else {
+          this.remove(); // 🔥 elimina el token si ya no es válido
         }
-        return false;
+      }
     }
+    return false;
+  }
 
-    payload(token: string) {
+
+  payload(token: string) {
         const payload = token.split('.')[1]; // Pilla el payload por la segunda parte del token (Son 3 partes separadas por un punto)
         return this.decode(payload);
     }
@@ -51,7 +53,7 @@ export class TokenService {
     }
 
     loggedIn(): boolean {
-        return !!this.get(); // Devuelve true si hay un token almacenado
+        return this.isValid(); // Devuelve true si hay un token almacenado
     }
 
   getUserData(): any {
