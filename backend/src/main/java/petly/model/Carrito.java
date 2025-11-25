@@ -3,6 +3,8 @@ package petly.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,34 +22,25 @@ public class Carrito {
     private Long id;
 
 
-    /**
-     * Relación ManyToOne con la entidad User.
-     * Un usuario puede tener varios carritos (historial de compras, por ejemplo).
-     */
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    /**
-     * Relación OneToMany con la entidad CartItem.
-     * Un carrito puede tener varios items.
-     * CascadeType.ALL asegura que al guardar el carrito se guarden los items automáticamente.
-     */
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CarritoProds> carProductos;
+    private List<CarritoProds> carProductos = new ArrayList<>();;
 
     @Column(name = "precio_total")
-    private Double precioTotal;
+    private BigDecimal precioTotal;
 
 
     @Column(name = "estado", nullable = false)
     @Enumerated(EnumType.STRING)
-    private estado status; // ACTIVE, COMPLETED, CANCELLED
+    private Estado estado; // ACTIVE, COMPLETED, CANCELLED
 
-    public enum estado {
+    public enum Estado {
         ACTIVO,       // carrito en uso
-        COMPLETEDO,    // carrito ya comprado
-        CANCELLEDO     // carrito eliminado/cancelado
+        COMPLETADO,    // carrito ya comprado
+        CANCELADO     // carrito eliminado/cancelado
     }
 
 }

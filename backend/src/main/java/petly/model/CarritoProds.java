@@ -3,6 +3,8 @@ package petly.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "carrito_prods")
 @Data
@@ -24,9 +26,9 @@ public class CarritoProds {
     @JoinColumn(name = "id_producto", nullable = false)
     private Producto producto;
 
-    @Column(nullable = false)
+
     private int cantidad;
 
-    @Column(nullable = false)
-    private Double precio;
+
+    private BigDecimal precio;
 }

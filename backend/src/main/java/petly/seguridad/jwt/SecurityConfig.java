@@ -65,6 +65,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(ar -> ar
                         .requestMatchers(HttpMethod.POST, "/usuarios/login", "/usuarios/register").permitAll()
+                        .requestMatchers("/usuarios/me", "/carrito/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -73,7 +74,7 @@ public class SecurityConfig {
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK))
                 )
-                .oauth2ResourceServer(rs -> rs.jwt(Customizer.withDefaults())); // ✅ JWT activado
+                .oauth2ResourceServer(rs -> rs.jwt(Customizer.withDefaults()));
         return http.build();
     }
 
@@ -108,6 +109,8 @@ public class SecurityConfig {
         return username -> /*(org.springframework.security.core.userdetails.UserDetails)*/ userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
+
 
     @Bean
     public JwtBlacklistLogoutHandler logoutHandler(TokenBlackListService tokenBlacklistService) {
