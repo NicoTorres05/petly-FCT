@@ -17,7 +17,6 @@ public class CategoriaDTO {
 
 
     public CategoriaDTO(Categoria categoria) {
-        //this.id = categoria.getId();
         this.nombre = categoria.getNombre();
         this.descripcion = categoria.getDescripcion();
         this.numProductos = (long) (categoria.getProductos() != null ? categoria.getProductos().size() : 0);

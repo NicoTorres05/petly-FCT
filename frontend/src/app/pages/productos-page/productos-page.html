@@ -5,7 +5,7 @@
     <h3>{{ producto.nombre }}</h3>
     <p>{{ producto.descripcion }}</p>
     <p class="precio">{{ producto.precio }}</p>
-    <button class="btn-any btn-comprar">Comprar</button>
+    <button (click)="agregarAlCarrito(producto)" class="btn-any btn-comprar">Comprar</button>
     <button class="btn-any" [routerLink]="['/productos', producto.id]">Ver detalle</button>
     <button class="btn-any" [routerLink]="['/productos/editar', producto.id]">Editar</button>
   </div>

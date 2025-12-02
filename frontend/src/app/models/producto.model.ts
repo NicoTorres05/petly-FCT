@@ -5,12 +5,11 @@ export interface Producto {
   nombre: string;
   descripcion?: string;
   foto?: string;
-  categoria?: Categoria;  // relación con categoría
-  // tipoAnimal?: Mascota; // lo puedes activar si creas ese modelo luego
+  categoria?: Categoria;
   precio: number;
   ventas?: number;
   stock?: number;
   descuento?: number;
-  fechaCreacion?: string; // normalmente se envía como texto ISO desde el backend
+  fechaCreacion?: string;
   activo?: boolean;
 }

@@ -5,6 +5,10 @@
     <p><strong>Email:</strong> {{ usuario.sub || usuario.email || '—' }}</p>
     <p><strong>Rol:</strong> {{ usuario.role || '—' }}</p>
   </div>
+  <button (click)="logout()">
+    Cerrar sesión
+  </button>
+
 </div>
 
 <ng-template #noUser>

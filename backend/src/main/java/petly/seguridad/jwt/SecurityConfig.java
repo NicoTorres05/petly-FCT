@@ -50,7 +50,6 @@ public class SecurityConfig {
         config.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Aplica a todas las rutas de tu API
         source.registerCorsConfiguration("/**", config);
         return source;
     }
@@ -106,7 +105,7 @@ public class SecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> /*(org.springframework.security.core.userdetails.UserDetails)*/ userRepository.findByEmail(username)
+        return username -> userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 

@@ -20,6 +20,5 @@ public class ProductoDTO {
     private int descuento;
     private Boolean activo;
 
-    // incluir info de la categoría
     private Long categoriaId;
 }

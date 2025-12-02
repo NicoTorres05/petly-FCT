@@ -21,13 +21,10 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(form: Object): Observable<any> {
-    // envía los datos del form login al backend
-    return this.http.post(`${this.url}/login`, form).pipe(
+    return this.http.post(`${this.baseUrl}/login`, form).pipe(
       tap((response: any) => {
         if (response.token) {
-          // guarda token en almacenamiento local
           this.tokenService.set(response.token);
-          // cambia estado a "logueado"
           this.changeAuthStatus(true);
         }
       })
@@ -37,21 +34,21 @@ export class AuthService {
 
   me(): Observable<any> {
     const token = this.tokenService.get();
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
     return this.http.get(`${this.baseUrl}/me`, { headers });
+
   }
 
 
 
   logout(): void {
-    // cambia estado a "no logueado"
     this.changeAuthStatus(false);
 
     this.tokenService.remove();
 
-    // obtiene token actual
     const token = this.tokenService.get();
     if (token) {
       const httpOptions = {
@@ -60,7 +57,6 @@ export class AuthService {
         })
       };
 
-      // envía POST al backend para cerrar sesión
       this.http.post(`${this.url}/logout`, {}, httpOptions).subscribe({
         next: () => {
           console.log('Sesión cerrada en el backend');
@@ -76,15 +72,12 @@ export class AuthService {
     const token = localStorage.getItem('authToken');
     if (!token) return false;
 
-    // decodifica el token
     const payload = JSON.parse(atob(token.split('.')[1]));
-    // true si el rol es "admin"
     return payload.role === 'admin';
   }
 
   register(form: Object): Observable<any> {
-    // datos registro al backend
-    return this.http.post(`${this.url}/register`, form).pipe(
+    return this.http.post(`${this.baseUrl}/register`, form).pipe(
       tap((response: any) => {
         if (response.token) {
           this.tokenService.set(response.token);
@@ -95,9 +88,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    // obtiene el token
     const token = localStorage.getItem(this.tokenKey);
-    // true si existe, false si no
     return !!token;
   }
 
@@ -117,7 +108,6 @@ export class AuthService {
 
 
   getUserData(): Observable<any> {
-    // obtiene el token
     const token = localStorage.getItem('authToken');
     if (!token) {
       console.warn('No se encontró un token en el almacenamiento local.');
@@ -130,7 +120,6 @@ export class AuthService {
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`
       });
-      // pide los datos del usuario usando ID
       return this.http.get(`${this.url}/${userId}`, { headers });
     } catch (error) {
       console.error('Error al decodificar el token:', error);

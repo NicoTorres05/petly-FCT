@@ -46,13 +46,12 @@ public class TokenService {
                 .issuer("http://localhost:8080")
                 .issueTime(Date.from(now))
                 .expirationTime(Date.from(now.plus(1, java.time.temporal.ChronoUnit.HOURS)))
-                .claim("roles", roles); // Añade los roles al payload
+                .claim("roles", roles);
 
         Usuario user = (Usuario) authentication.getPrincipal();
         builder.claim("id", user.getId());
-        builder.claim("name", user.getNombre());
         builder.claim("email", user.getEmail());
-        builder.claim("role", user.getTipo().name()); // Añade el rol del usuario al payload
+        builder.claim("role", user.getTipo().name());
 
         var claims = builder.build();
 

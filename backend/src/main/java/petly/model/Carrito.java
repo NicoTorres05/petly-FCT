@@ -1,5 +1,6 @@
 package petly.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class Carrito {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false)
+    @JsonBackReference
     private Usuario usuario;
 
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -35,12 +37,20 @@ public class Carrito {
 
     @Column(name = "estado", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Estado estado; // ACTIVE, COMPLETED, CANCELLED
+    private Estado estado;
 
     public enum Estado {
-        ACTIVO,       // carrito en uso
-        COMPLETADO,    // carrito ya comprado
-        CANCELADO     // carrito eliminado/cancelado
+        ACTIVO,
+        COMPLETADO,
+        CANCELADO
+    }
+
+
+    public CarritoProds findItem(Long productoId) {
+        return carProductos.stream()
+                .filter(cp -> cp.getProducto().getId().equals(productoId))
+                .findFirst()
+                .orElse(null);
     }
 
 }

@@ -5,10 +5,16 @@
   <div class="search-bar">
     <input type="text" placeholder="Buscar productos..." />
     <button>🔍</button>
+
   </div>
+  <div>
+    <h3>Saldo:{{usuario?.saldo}}</h3>
+  </div>
+
+
 
   <div class="icons">
     <img src="assets/icons/user.png" alt="Perfil" class="icon" routerLink="/usuarios/profile"/>
-    <img src="assets/icons/shopping-cart.png" alt="Carrito" class="icon" />
+    <img src="assets/icons/shopping-cart.png" alt="Carrito" class="icon" routerLink="/carrito" />
   </div>
 </header>

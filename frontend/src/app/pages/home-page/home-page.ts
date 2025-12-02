@@ -18,8 +18,6 @@ import { Carousel } from 'bootstrap';
 export class HomePageComponent implements OnInit {
 
   constructor(private productoService: ProductoService) {
-
-
   }
 
 

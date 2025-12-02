@@ -12,7 +12,6 @@ import petly.model.Usuario;
 import petly.dto.UsuarioRegDTO;
 import petly.repository.UsuarioRepository;
 import petly.seguridad.jwt.SecurityConfig;
-import petly.service.TokenService;
 
 import java.util.List;
 
@@ -76,9 +75,7 @@ public class UsuarioService {
         user.setEmail(dto.getEmail());
         user.setEmail(dto.getEmail());
         user.setTipo(Usuario.tipo.NORMAL);
-        // Ciframos la contraseña antes de guardar:
         user.setContrasena(passwordEncoder.encode(dto.getContrasena()));
-        // Convertimos el String a tu enum Roles (asegúrate de que coincide):
 
         return usuarioRepository.save(user);
     }
@@ -89,5 +86,10 @@ public class UsuarioService {
         Usuario user = (Usuario) authentication.getPrincipal();
         String token = tokenService.generateToken(authentication, null); // Genera un nuevo token, el segundo parámetro es el token actual (null en este caso)
         return new SecurityConfig.LoginResponse(token, user.getNombre(), user.getEmail());
+    }
+
+    public Usuario findById(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 }

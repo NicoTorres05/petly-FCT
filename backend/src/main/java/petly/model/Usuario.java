@@ -2,6 +2,7 @@ package petly.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -65,14 +66,11 @@ public class Usuario implements UserDetails {
     private LocalDate fechaRegistro;
 
 
-    // @ManyToOne
-    // @JoinColumn(name = "mascota_id")
-    // private Mascota mascota;
-
     //@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     //private List<Comentario> comentarios;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Carrito> carritos;
 
     @Override

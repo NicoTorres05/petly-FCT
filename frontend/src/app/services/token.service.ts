@@ -35,7 +35,7 @@ export class TokenService {
         if (isIssuerValid && isNotExpired) {
           return true;
         } else {
-          this.remove(); // 🔥 elimina el token si ya no es válido
+          this.remove();
         }
       }
     }
@@ -44,7 +44,7 @@ export class TokenService {
 
 
   payload(token: string) {
-        const payload = token.split('.')[1]; // Pilla el payload por la segunda parte del token (Son 3 partes separadas por un punto)
+        const payload = token.split('.')[1];
         return this.decode(payload);
     }
 
@@ -53,7 +53,7 @@ export class TokenService {
     }
 
     loggedIn(): boolean {
-        return this.isValid(); // Devuelve true si hay un token almacenado
+        return this.isValid();
     }
 
   getUserData(): any {
@@ -63,7 +63,6 @@ export class TokenService {
     const payload = this.payload(token);
     if (!payload) return null;
 
-    // Devuelve el payload completo (contiene datos como email, roles, etc.)
     return payload;
   }
 

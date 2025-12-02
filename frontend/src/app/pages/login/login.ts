@@ -33,7 +33,6 @@ export class Login {
   }
 
   submit() {
-
     if (this.loginForm.valid) {
       Swal.fire({
         title: 'Bienvenido',
@@ -51,21 +50,23 @@ export class Login {
       });
 
       this.loginForm.markAllAsTouched();
-
       return;
     }
 
     this.hasLoaded = false;
+
     this.authService.login(this.loginForm.value).subscribe({
       next: (rtn) => {
-
         const validToken = this.tokenService.handle(rtn.token);
 
         if (validToken) {
+          localStorage.setItem('token', rtn.token);
+
           this.authService.changeAuthStatus(true);
           console.log("Logged in successfully");
-
         }
+
+        this.hasLoaded = true;
       },
       error: (error) => {
         console.error(error);
@@ -74,6 +75,7 @@ export class Login {
       },
     });
   }
+
 
   handleError(error: any) {
     this.error = error.error.error;

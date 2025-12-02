@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ProductoService } from '../../services/producto.service';
 import { Producto } from '../../models/producto.model';
+import { CarritoService } from '../../services/carrito.service';
 
 
 @Component({
@@ -16,8 +17,9 @@ import { Producto } from '../../models/producto.model';
 })
 export class ProductosPageComponent implements OnInit {
   productos: Producto[] = [];
+  userId = 7;
 
-  constructor(private route: ActivatedRoute, private productoService: ProductoService) {}
+  constructor(private route: ActivatedRoute, private productoService: ProductoService, private carritoService: CarritoService) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -37,6 +39,15 @@ export class ProductosPageComponent implements OnInit {
         console.error('Error cargando productos', err);
       }
     });
+  }
+
+  agregarAlCarrito(producto: Producto) {
+    console.log("Producto ID que se envía:", producto.id);
+    this.carritoService.addToCarrito(producto.id, 1)
+      .subscribe({
+        next: (res) => alert(res),
+        error: (err) => console.error('Error al agregar al carrito:', err)
+      });
   }
 
 }

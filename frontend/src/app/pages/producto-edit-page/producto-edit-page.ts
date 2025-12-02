@@ -69,7 +69,6 @@ export class ProductoEditPage implements OnInit {
         next: (data) => {
           this.producto = data;
           console.log('Producto cargado:', data);
-          // rellenar formulario con los datos
           this.productForm.patchValue(data);
         },
         error: (err) => console.error('Error cargando producto', err)

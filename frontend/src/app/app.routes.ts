@@ -8,6 +8,7 @@ import { Login } from './pages/login/login'
 import { Profile } from './pages/profile/profile'
 import { AuthGuard } from './guard/auth.guard';
 import { EditProfileData } from './pages/edit-profile-data/edit-profile-data'
+import { CarritoPage } from './pages/carrito-page/carrito-page'
 
 export const routes = [
   { path: '', component: HomePageComponent },
@@ -20,6 +21,7 @@ export const routes = [
   { path: 'usuarios/login', component: Login},
   { path: 'usuarios/profile', component: Profile, canActivate: [AuthGuard]},
   { path: 'usuarios/profile/edit', component: EditProfileData, canActivate: [AuthGuard]},
+  { path: 'carrito', component: CarritoPage, canActivate: [AuthGuard]},
 
 
 

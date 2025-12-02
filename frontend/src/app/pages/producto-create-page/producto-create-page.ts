@@ -28,6 +28,7 @@ export class ProductoCreatePage implements OnInit {
   categorias: Categoria[] = [];
 
   //TODO script para que no puedas poner muchos decimales
+
   constructor(
     private fb: FormBuilder,
     private router: Router,

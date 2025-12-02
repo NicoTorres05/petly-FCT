@@ -27,7 +27,6 @@ export class EditProfileData implements OnInit {
   ngOnInit(): void {
     this.usuario = this.tokenService.getUserData();
 
-    // Inicializamos el formulario con los valores actuales
     this.perfilForm = this.fb.group({
       nombre: [this.usuario?.name || '', Validators.required],
       email: [this.usuario?.sub || this.usuario?.email || '', [Validators.required, Validators.email]],
@@ -57,7 +56,6 @@ export class EditProfileData implements OnInit {
           confirmButtonText: 'Continuar'
         });
 
-        // Solo actualiza el token si el backend te devuelve uno
         if (updatedUser.token) {
           this.tokenService.set(updatedUser.token);
         }

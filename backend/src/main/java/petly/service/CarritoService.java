@@ -34,12 +34,9 @@ public class CarritoService {
     private UsuarioRepository usuarioRepository;
 
     public void addProducto(Long userId, Long productId, int cantidad) {
-        System.out.println("Hola");
         Carrito carrito = carritoRepository.findByUsuarioIdAndEstado(userId, Carrito.Estado.ACTIVO)
                 .orElseGet(() -> crearNuevoCarrito(userId));
 
-     //   System.out.println("Carrito ID: " + carrito.getId());
-     //   System.out.println("Producto ID: " + productId);
 
         if (carrito.getId() == null) {
             carrito = carritoRepository.save(carrito);
@@ -64,13 +61,8 @@ public class CarritoService {
             carrito.getCarProductos().add(item);
         }
 
-        BigDecimal total = carrito.getCarProductos().stream()
-                .map(item -> item.getPrecio().multiply(BigDecimal.valueOf(item.getCantidad())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        carrito.setPrecioTotal(total);
-
-        carritoRepository.save(carrito);
+        calcTotal(carrito);
     }
 
 
@@ -112,7 +104,38 @@ public class CarritoService {
 
     public void delete(Long id) {
         carritoRepository.deleteById(id);
+
     }
+
+    public void deleteItem(Long idUsuario, Long idItem) {
+        carritoProdsRepository.deleteItemFromCarrito(idUsuario, idItem);
+
+        Carrito carrito = carritoRepository
+                .findByUsuarioIdAndEstado(idUsuario, Carrito.Estado.ACTIVO)
+                .orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
+
+        calcTotal(carrito);
+    }
+
+    public void restarProducto(Long userId, Long productoId, int cantidad) {
+        Carrito carrito = carritoRepository.findByUsuarioIdAndEstado(userId, Carrito.Estado.ACTIVO)
+                .orElseThrow(() -> new RuntimeException("Carrito activo no encontrado"));
+
+        CarritoProds item = carrito.findItem(productoId);
+
+        if (item != null) {
+            item.setCantidad(item.getCantidad() - cantidad);
+
+            if (item.getCantidad() <= 0) {
+                carrito.getCarProductos().remove(item);
+            }
+
+            carritoRepository.save(carrito);
+
+        }
+        calcTotal(carrito);
+    }
+
 
     public Carrito replace(Long id, Carrito carrito) {
         carrito.setId(id);
@@ -124,7 +147,7 @@ public class CarritoService {
             throw new RuntimeException("Usuario no autenticado");
         }
 
-        String email = auth.getName(); // nombre de usuario desde JWT
+        String email = auth.getName();
         Long userId = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"))
                 .getId();
@@ -162,5 +185,14 @@ public class CarritoService {
         return dto;
     }
 
+    public BigDecimal calcTotal(Carrito carrito) {
+        BigDecimal total = carrito.getCarProductos().stream()
+                .map(item -> item.getPrecio().multiply(BigDecimal.valueOf(item.getCantidad())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        carrito.setPrecioTotal(total);
+        carritoRepository.save(carrito);
+
+        return total;
+    }
 }
