@@ -1,9 +1,11 @@
 <div *ngIf="usuario; else noUser" class="perfil">
   <h2>Perfil del Usuario</h2>
+  <img class="pfp" *ngIf="usuario?.pfp" [src]="'http://localhost:8080' + usuario?.pfp" alt="Foto de perfil" width="100">
   <div class="perfil-info">
-    <p><strong>Nombre:</strong> {{ usuario.name || '—' }}</p>
+    <p><strong>Nombre:</strong> {{ usuario.nombre || '—' }}</p>
     <p><strong>Email:</strong> {{ usuario.sub || usuario.email || '—' }}</p>
-    <p><strong>Rol:</strong> {{ usuario.role || '—' }}</p>
+    <p><strong>Teléfono:</strong> +34 {{ usuario.telefono || '—' }}</p>
+    <p><strong>Rol:</strong> {{ usuario.tipo || '—' }}</p>
   </div>
   <button (click)="logout()">
     Cerrar sesión

@@ -22,6 +22,8 @@ import {Producto} from '../../models/producto.model';
 export class CarritoPage implements OnInit {
   carrito!: Carrito;
   usuario: any = null;
+  productos: { [id: number]: Producto } = {};
+
 
   constructor(
     private carritoService: CarritoService,
@@ -42,9 +44,19 @@ export class CarritoPage implements OnInit {
   cargarCarrito() {
     this.carritoService.getCarritoActivo().subscribe(data => {
       this.carrito = data;
-      console.log(this.carrito)
+
+      this.carrito.productos.forEach(item => {
+        this.http.get<Producto>(`http://localhost:8080/productos/${item.productoId}`)
+          .subscribe({
+            next: (prod) => this.productos[item.productoId] = prod,
+            error: (err) => console.error('Error cargando producto', err)
+          });
+      });
+
+      this.actualizarTotal();
     });
   }
+
 
   agregarProducto(productId: number) {
     console.log("Producto ID que se envía:", productId);
@@ -66,13 +78,27 @@ export class CarritoPage implements OnInit {
   }
 
   eliminarUno(productId: number) {
-    console.log("Eliminar 1:", productId);
+    const item = this.carrito.productos.find(p => p.productoId === productId);
+    if (!item) return;
 
-    this.carritoService.removeOne(productId, 1).subscribe({
-      next: () => this.cargarCarrito(),
-      error: (err) => console.error('Error al eliminar una unidad:', err)
-    });
+    if (item.cantidad <= 1) {
+      this.eliminarProducto(productId);
+    } else {
+      this.carritoService.removeOne(productId, 1).subscribe({
+        next: () => {
+          item.cantidad -= 1;
+          this.actualizarTotal();
+        },
+        error: (err) => console.error(err)
+      });
+    }
   }
+
+  actualizarTotal() {
+    this.carrito.precioTotal = this.carrito.productos.reduce((sum, p) => sum + p.cantidad * p.precio, 0);
+  }
+
+
 
 
   comprar() {
@@ -80,6 +106,8 @@ export class CarritoPage implements OnInit {
       next: (resp) => {
         alert(resp.mensaje);
         this.cargarCarrito();
+        window.location.reload();
+
       },
       error: (err) => {
         alert(err.error.mensaje || 'No se pudo completar la compra');

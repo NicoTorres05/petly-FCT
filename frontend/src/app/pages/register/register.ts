@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule  } from '@angul
 import { AuthService } from '../../services/auth.service';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,7 +13,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./register.css'],
   imports: [
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ]
 })
 export class Register implements OnInit {
@@ -63,6 +65,7 @@ export class Register implements OnInit {
 
 
                 this.router.navigate(['/']);
+                window.location.reload();
               }
             },
             error: (err) => {

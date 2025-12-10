@@ -1,9 +1,10 @@
 <div class="login-page">
   <div class="login-card">
     <div class="login-header">
-      <h2>Iniciar Sesión</h2>
     </div>
     <form [formGroup]="loginForm" (ngSubmit)="submit()">
+      <h2>Iniciar Sesión</h2>
+
       <div class="form-group">
         <label for="email">Email:</label>
         <input id="email" type="email" formControlName="email" placeholder="Email"
@@ -21,7 +22,10 @@
           Contraseña requerida
         </div>
       </div>
-      <button type="submit" class="btn-submit">Aceptar</button>
+      <div>
+        <button type="submit" class="btn-submit">Aceptar</button>
+      </div>
+      <a routerLink="/usuarios/registro">¿No estás registrado?</a>
     </form>
   </div>
 </div>

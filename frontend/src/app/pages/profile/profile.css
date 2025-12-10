@@ -31,3 +31,14 @@ strong {
   font-size: 1.1rem;
   color: #666;
 }
+
+.pfp {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+  display: block;
+  margin: 10px auto;
+}

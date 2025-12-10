@@ -9,19 +9,22 @@ import { Profile } from './pages/profile/profile'
 import { AuthGuard } from './guard/auth.guard';
 import { EditProfileData } from './pages/edit-profile-data/edit-profile-data'
 import { CarritoPage } from './pages/carrito-page/carrito-page'
+import { UsuariosList } from './pages/usuarios-list/usuarios-list'
 
 export const routes = [
   { path: '', component: HomePageComponent },
   { path: 'productos', component: ProductosPageComponent },
-  { path: 'productos/crear', component: ProductoCreatePage },
-  { path: 'productos/editar/:id', component: ProductoEditPage },
+  { path: 'productos/crear', component: ProductoCreatePage, canActivate: [AuthGuard] },
+  { path: 'productos/editar/:id', component: ProductoEditPage, canActivate: [AuthGuard] },
   { path: 'productos/:id', component: ProductoDetailPage },
   { path: 'categorias/productos', component: ProductosPageComponent },
   { path: 'usuarios/registro', component: Register},
   { path: 'usuarios/login', component: Login},
+  { path: 'usuarios/editar/:id', component: EditProfileData, canActivate: [AuthGuard] },
   { path: 'usuarios/profile', component: Profile, canActivate: [AuthGuard]},
   { path: 'usuarios/profile/edit', component: EditProfileData, canActivate: [AuthGuard]},
   { path: 'carrito', component: CarritoPage, canActivate: [AuthGuard]},
+  { path: 'usuarios/list', component: UsuariosList, canActivate: [AuthGuard]},
 
 
 

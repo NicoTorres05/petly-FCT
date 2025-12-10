@@ -6,12 +6,15 @@ import {CarritoService} from '../../services/carrito.service';
 import {AuthService} from '../../services/auth.service';
 import {UsuarioService} from '../../services/usuario.service';
 import {TokenService} from '../../services/token.service';
+import { BuscarService } from '../../services/buscar.service';
+import { FormsModule } from '@angular/forms';
+
 
 
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './header.html',
   standalone: true,
   styleUrl: './header.css'
@@ -19,38 +22,37 @@ import {TokenService} from '../../services/token.service';
 export class Header implements OnInit {
 
   usuario: Usuario | null = null;
+  searchTerm: string = '';
 
   constructor(
+    private authService: AuthService,
     private usuarioService: UsuarioService,
+    private buscarService: BuscarService,
     private tokenService: TokenService,
   ) {}
 
   ngOnInit() {
-
-    const userData = this.tokenService.getUserData();
-
-    if (!userData || !userData.id) {
-      console.warn("No hay usuario logueado");
-      return;
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      this.authService.me().subscribe({
+        next: (user) => {
+          this.usuario = user;
+          console.log('Usuario logeado:', user);
+        },
+        error: () => {
+          console.warn('Token inválido, limpiando sesión');
+          localStorage.removeItem('authToken');
+          this.usuario = null;
+        }
+      });
+    } else {
+      this.usuario = null;
     }
+  }
 
-    const userId = userData.id;
 
-    this.usuarioService.getUserById(userId).subscribe({
-      next: (user) => {
-        this.usuario = user;
-        console.log("Usuario cargado desde BD:", user);
-      },
-      error: (err) => {
-        console.error("Error cargando usuario:", err);
-      }
-    });
-
-    this.usuarioService.currentUser$.subscribe(user => {
-      if (user) {
-        this.usuario = user;
-      }
-    });
-
+  buscarProductos() {
+    const term = this.searchTerm.trim();
+    this.buscarService.setSearchTerm(term);
   }
 }

@@ -1,12 +1,21 @@
-<button class="btn-any" [routerLink]="['/productos/crear']" type="button">Crear Producto</button>
-<div class="productos-grid">
-  <div *ngFor="let producto of productos" class="producto-card">
-    <img [src]="'assets/' + producto.foto" alt="{{ producto.foto }}">
-    <h3>{{ producto.nombre }}</h3>
-    <p>{{ producto.descripcion }}</p>
-    <p class="precio">{{ producto.precio }}</p>
-    <button (click)="agregarAlCarrito(producto)" class="btn-any btn-comprar">Comprar</button>
-    <button class="btn-any" [routerLink]="['/productos', producto.id]">Ver detalle</button>
-    <button class="btn-any" [routerLink]="['/productos/editar', producto.id]">Editar</button>
+<div *ngIf="usuario">
+  <button class="btn-any" [routerLink]="['/productos/crear']" type="button">Crear Producto</button></div>
+<div *ngIf="productos.length > 0; else noProductos">
+  <div class="productos-grid">
+    <div *ngFor="let producto of productos" class="producto-card">
+      <img [src]="'assets/' + producto.foto" alt="{{ producto.foto }}">
+      <h3>{{ producto.nombre }}</h3>
+      <p>{{ producto.descripcion }}</p>
+      <p class="precio">{{ producto.precio }} €</p>
+      <button (click)="agregarAlCarrito(producto)" class="btn-any btn-comprar">Añadir al carrito</button>
+      <button class="btn-any" [routerLink]="['/productos', producto.id]">Ver detalle</button>
+      <div *ngIf="usuario">
+        <button class="btn-any" [routerLink]="['/productos/editar', producto.id]">Editar</button>
+      </div>
+    </div>
   </div>
 </div>
+<ng-template #noProductos>
+  <h3>No se encuentras productos con esas especificaciones.</h3>
+</ng-template>
+

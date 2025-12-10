@@ -6,10 +6,11 @@ import { TokenService } from '../../services/token.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { TranslateModule } from '@ngx-translate/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterModule],
   templateUrl: './login.html',
   standalone: true,
   styleUrl: './login.css'
@@ -65,7 +66,6 @@ export class Login {
           this.authService.changeAuthStatus(true);
           console.log("Logged in successfully");
         }
-
         this.hasLoaded = true;
       },
       error: (error) => {

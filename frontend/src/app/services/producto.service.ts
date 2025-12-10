@@ -5,7 +5,7 @@ import { Producto } from '../models/producto.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProductoService {
-  private apiUrl = 'http://localhost:8080/api/productos';
+  private url = 'http://localhost:8080/productos';
 
   constructor(private http: HttpClient) {}
 
@@ -15,31 +15,30 @@ export class ProductoService {
     let params = new HttpParams();
     if (categoriaId) {
       params = params.set('categoriaId', categoriaId.toString());
-      return this.http.get<Producto[]>(this.apiUrl, {params});
+      return this.http.get<Producto[]>(this.url, {params});
     } else {
-      return this.http.get<Producto[]>(this.apiUrl);
+      return this.http.get<Producto[]>(this.url);
     }
   }
 
   create(producto: Producto): Observable<Producto> {
-    return this.http.post<Producto>(this.apiUrl, producto);
+    return this.http.post<Producto>(this.url, producto);
   }
 
   find(id: number): Observable<Producto> {
-    return this.http.get<Producto>(`${this.apiUrl}/${id}`);
+    return this.http.get<Producto>(`${this.url}/${id}`);
   }
 
+  buscarProductosPorNombre(nombre: string) {
+    return this.http.get<Producto[]>(`${this.url}/buscar`, { params: { nombre } });
+  }
+
+
   delete(id: number): Observable<Producto> {
-    return this.http.delete<Producto>(`${this.apiUrl}/${id}`);
+    return this.http.delete<Producto>(`${this.url}/${id}`);
   }
 
   update(id: number, producto: Producto): Observable<Producto> {
-    return this.http.put<Producto>(`${this.apiUrl}/${id}`, producto);
+    return this.http.put<Producto>(`${this.url}/${id}`, producto);
   }
-
-
-
-
-
-
 }

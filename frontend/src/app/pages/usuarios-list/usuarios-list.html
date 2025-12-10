@@ -1,0 +1,36 @@
+<div *ngIf="usuarios.length > 0; else noUsuarios">
+
+  <table class="tabla-usuarios">
+    <thead>
+    <tr>
+      <th>ID Usuario</th>
+      <th>Email</th>
+      <th>Tipo de usuario</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let usuario of usuarios">
+      <td>{{ usuario.id }}</td>
+      <td>{{ usuario.email }}</td>
+      <td>{{ usuario.tipo }}</td>
+
+      <td>
+
+
+        <button class="btn-any" [routerLink]="['/usuarios/editar', usuario.id]">
+          Editar
+        </button>
+
+        <button class="btn-any delete" type="button" (click)="eliminarUsuario(usuario.id)">Eliminar</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<ng-template #noUsuarios>
+  <h3>No se encuentran usuarios con esas especificaciones.</h3>
+</ng-template>

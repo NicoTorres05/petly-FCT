@@ -1,9 +1,9 @@
 <div class="user-page">
   <div class="user-card">
     <div class="user-header">
-      <h2>Registrar Usuario</h2>
     </div>
     <form [formGroup]="userForm" (ngSubmit)="submit()">
+      <h2>Registrate</h2>
 
       <!-- Nombre -->
       <div class="form-group">
@@ -59,7 +59,10 @@
       </div>
 
       <!-- Botón de enviar -->
-      <button type="submit" class="btn-submit">Registrar</button>
+      <div>
+        <button type="submit" class="btn-submit">Registrar</button>
+      </div>
+      <a routerLink="/usuarios/login">¿Ya estás registrado?</a>
     </form>
   </div>
 </div>

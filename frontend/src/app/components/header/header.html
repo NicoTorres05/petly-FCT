@@ -1,20 +1,53 @@
 <header class="header">
+
+  <!-- LOGO -->
   <div class="logo">
     <a routerLink="/"><img src="assets/title_logo.png" alt="Logo" /></a>
   </div>
+
+  <!-- SEARCH BAR -->
   <div class="search-bar">
-    <input type="text" placeholder="Buscar productos..." />
-    <button>🔍</button>
-
+    <input
+      type="text"
+      placeholder="Buscar productos..."
+      [(ngModel)]="searchTerm"
+      (keyup.enter)="buscarProductos()"
+    />
+    <button (click)="buscarProductos()">🔍</button>
   </div>
-  <div>
-    <h3>Saldo:{{usuario?.saldo}}</h3>
+
+  <!-- SALDO (solo si hay usuario) -->
+  <div *ngIf="usuario" class="saldo">
+    <span>{{ usuario?.saldo }} €</span>
   </div>
 
-
-
+  <!-- ÍCONOS -->
   <div class="icons">
-    <img src="assets/icons/user.png" alt="Perfil" class="icon" routerLink="/usuarios/profile"/>
-    <img src="assets/icons/shopping-cart.png" alt="Carrito" class="icon" routerLink="/carrito" />
+
+    <!-- FOTO PERFIL O ICONO DEFAULT -->
+    <img
+      *ngIf="usuario?.pfp; else noUser"
+      class="pfp"
+      [src]="'http://localhost:8080' + usuario?.pfp"
+      routerLink="/usuarios/profile"
+    />
+
+    <ng-template #noUser>
+      <img
+        src="assets/icons/user.png"
+        alt="Perfil"
+        class="icon"
+        routerLink="/usuarios/profile"
+      />
+    </ng-template>
+
+    <!-- CARRITO -->
+    <img
+      src="assets/icons/shopping-cart.png"
+      alt="Carrito"
+      class="icon"
+      routerLink="/carrito"
+    />
+
   </div>
 </header>

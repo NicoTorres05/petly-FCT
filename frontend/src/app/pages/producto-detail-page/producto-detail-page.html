@@ -6,12 +6,50 @@
   <div class="producto-info">
     <h1>{{ producto.nombre }}</h1>
     <p class="descripcion">{{ producto.descripcion }}</p>
-    <p class="precio">Precio: {{ producto.precio }}</p>
+    <p class="precio">Precio: {{ producto.precio }} €</p>
 
 
-    <p>Stock disponible: {{ producto.stock }}</p>
+    <p>Stock disponible: {{ producto.stock }} unidades</p>
 
     <button class="btn-comprar">Comprar</button>
+  </div>
+</div>
+<div class="producto-detail-container">
+  <h1>¡Deja tu comentario!</h1>
+  <form [formGroup]="commentForm" (ngSubmit)="submit()" class="comment-form">
+
+    <label for="titulo">Título</label>
+    <input id="titulo" type="text" formControlName="titulo" placeholder="Escribe un título">
+    <div class="error" *ngIf="commentForm.get('titulo')?.touched && commentForm.get('titulo')?.invalid">
+      El título es obligatorio.
+    </div>
+
+    <label for="mensaje">Comentario</label>
+    <textarea id="mensaje" formControlName="mensaje" placeholder="Escribe tu comentario"></textarea>
+    <div class="error" *ngIf="commentForm.get('mensaje')?.touched && commentForm.get('mensaje')?.invalid">
+      El mensaje es obligatorio.
+    </div>
+
+    <label for="clasificacion">Clasificación</label>
+    <select id="clasificacion" formControlName="clasificacion">
+      <option *ngFor="let n of [1,2,3,4,5]" [value]="n">{{ n }} ⭐</option>
+    </select>
+
+    <button type="submit" [disabled]="commentForm.invalid">Publicar comentario</button>
+
+  </form>
+
+</div>
+<div class="comentarios-container" *ngIf="comentarios && comentarios.length > 0">
+  <h2>Comentarios</h2>
+
+  <div class="comentarios-grid">
+    <div class="comentario-card" *ngFor="let comentario of comentarios">
+      <h3>{{ comentario.titulo }}</h3>
+      <p>{{ comentario.mensaje }}</p>
+      <p>⭐ {{ comentario.clasificacion }}</p>
+      <small>Publicado el {{ comentario.fechaPublicacion | date:'short' }}</small>
+    </div>
   </div>
 </div>
 
