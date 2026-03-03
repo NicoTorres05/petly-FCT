@@ -1,11 +1,14 @@
 package petly.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import petly.dto.CarritoAddDTO;
 import petly.dto.CarritoDTO;
+import petly.dto.CheckoutMessage;
 import petly.model.Carrito;
+import petly.model.CarritoProds;
 import petly.model.Usuario;
 import petly.repository.CarritoRepository;
 import petly.repository.UsuarioRepository;
@@ -15,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import petly.service.CheckoutService;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -27,6 +31,9 @@ public class CarritoController {
 
     @Autowired
     private CarritoService carritoService;
+
+    @Autowired
+    private CheckoutService checkoutService;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -129,40 +136,17 @@ public class CarritoController {
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<String> checkout(Authentication auth) {
+    public ResponseEntity<?> checkout(Authentication auth) {
         if (auth == null) {
             return ResponseEntity.status(401).body("Usuario no autenticado");
         }
 
-
         String email = auth.getName();
+        CheckoutMessage mes = checkoutService.checkout(email);
 
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        Carrito carrito = carritoRepository.findByUsuarioIdAndEstado(usuario.getId(), Carrito.Estado.ACTIVO)
-                .orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
-
-
-        BigDecimal total = carritoService.calcTotal(carrito);
-        BigDecimal saldo = usuario.getSaldo();
-
-        if (saldo.compareTo(total) < 0) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("mensaje", "Saldo insuficiente").toString());
-        }
-
-        usuario.setSaldo(saldo.subtract(total));
-        usuarioRepository.save(usuario);
-
-        carritoService.completarCarrito(usuario.getId());
-
-        return ResponseEntity.ok(Map.of(
-                "mensaje", "Carrito completado correctamente",
-                "saldoActual", usuario.getSaldo()
-        ).toString());
-
+        return ResponseEntity.ok(mes);
     }
+
 
 
 

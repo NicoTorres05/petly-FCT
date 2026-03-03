@@ -1,5 +1,6 @@
 package petly.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,8 +20,10 @@ public class CarritoProds {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_carrito", nullable = false)
+    @JoinColumn(name = "id_carrito")
+    @JsonBackReference
     private Carrito carrito;
+
 
     @ManyToOne
     @JoinColumn(name = "id_producto", nullable = false)

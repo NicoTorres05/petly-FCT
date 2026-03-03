@@ -35,17 +35,18 @@ export class Profile implements OnInit {
     this.usuarioService.getUserById(userId).subscribe({
       next: (user) => {
         this.usuario = user;
-        console.log("Usuario cargado desde BD:", user);
+        //console.log("Usuario cargado desde BD:", user);
       },
       error: (err) => {
-        console.error("Error cargando usuario:", err);
+        //console.error("Error cargando usuario:", err);
       }
     });
     this.usuarioService.currentUser$.subscribe(user => {
       if (user) {
         this.usuario = user;
       }
-    });    console.log('Datos del usuario:', this.usuario);
+    });
+    //console.log('Datos del usuario:', this.usuario);
   }
 
   logout(): void {
@@ -62,12 +63,12 @@ export class Profile implements OnInit {
 
       this.http.post(`${this.url}/logout`, {}, httpOptions).subscribe({
         next: () => {
-          console.log('Sesión cerrada en el backend');
+          //console.log('Sesión cerrada en el backend');
           window.location.reload();
 
         },
         error: (err) => {
-          console.error('Error al cerrar sesión en el backend:', err);
+          //console.error('Error al cerrar sesión en el backend:', err);
         }
       });
     }

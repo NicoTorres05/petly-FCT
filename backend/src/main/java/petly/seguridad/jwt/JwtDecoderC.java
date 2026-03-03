@@ -1,6 +1,7 @@
 package petly.seguridad.jwt;
 
-import petly.token.TokenBlackListService;
+import petly.service.TokenBlackListService;
+
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.oauth2.jwt.Jwt;

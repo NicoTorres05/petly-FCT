@@ -62,14 +62,40 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
-    public Categoria replace(@PathVariable Long id, @RequestBody Categoria categoria) {
-        return this.categoriaService.replace(id, categoria);
+    public ResponseEntity<CategoriaDTO> updateCategoria(
+            @PathVariable Long id,
+            @RequestBody CategoriaDTO dto) {
+
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+
+        categoria.setNombre(dto.getNombre());
+        categoria.setDescripcion(dto.getDescripcion());
+
+        categoriaRepository.save(categoria);
+
+        CategoriaDTO responseDto = new CategoriaDTO();
+        responseDto.setNombre(categoria.getNombre());
+        responseDto.setDescripcion(categoria.getDescripcion());
+
+        return ResponseEntity.ok(responseDto);
     }
+
+
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void deleteCategory(@PathVariable("id") Long id) {
-        this.categoriaService.delete(id);
+    public ResponseEntity<Void> deleteCategoria(@PathVariable Long id) {
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+
+        if (!categoria.getProductos().isEmpty()) {
+            throw new RuntimeException("No se puede eliminar una categoría que tiene productos asociados");
+        }
+
+        categoriaRepository.delete(categoria);
+
+        return ResponseEntity.noContent().build();
     }
 }

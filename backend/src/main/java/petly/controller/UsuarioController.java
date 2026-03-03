@@ -3,13 +3,16 @@ package petly.controller;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.multipart.MultipartFile;
+import petly.dto.UsuarioDTO;
 import petly.dto.UsuarioLogDTO;
 import petly.dto.UsuarioRegDTO;
 import petly.model.Usuario;
-import petly.service.TokenBlacklistService;
+import petly.service.TokenBlackListService;
 import petly.service.UsuarioService;
 import petly.seguridad.jwt.SecurityConfig.*;
 import petly.service.TokenService;
+import petly.repository.UsuarioRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.core.Authentication;
 
@@ -23,25 +26,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/usuarios")
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-    private final TokenBlacklistService tokenBlacklistService;
+    private final TokenBlackListService tokenBlacklistService;
     private final TokenService tokenService;
+    private final UsuarioRepository usuarioRepository;
 
-    public UsuarioController(UsuarioService usuarioService, TokenBlacklistService tokenBlacklistService, TokenService tokenService) {
+    public UsuarioController(UsuarioService usuarioService, TokenBlackListService tokenBlacklistService, TokenService tokenService, UsuarioRepository usuarioRepository) {
         this.usuarioService = usuarioService;
         this.tokenBlacklistService = tokenBlacklistService;
         this.tokenService = tokenService;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @GetMapping
@@ -88,10 +92,12 @@ public class UsuarioController {
         return this.usuarioService.save(user);
     }
 
-    @PutMapping("/{id:[0-9]+}")
-    public Usuario replaceUsers(@PathVariable("id") Long id, @RequestBody Usuario user) {
-        return this.usuarioService.replace(id, user);
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> updateUsuario(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) {
+        Usuario updated = usuarioService.replace(id, usuarioDTO);
+        return ResponseEntity.ok(updated);
     }
+
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -104,8 +110,8 @@ public class UsuarioController {
 
     @GetMapping("/me")
     public ResponseEntity<Usuario> getCurrentUser(Authentication authentication) {
-        Jwt jwt = (Jwt) authentication.getPrincipal(); // ahora es Jwt
-        Long userId = jwt.getClaim("id"); // extraemos el id desde los claims
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Long userId = jwt.getClaim("id");
 
         Usuario usuarioCompleto = usuarioService.findById(userId);
         return ResponseEntity.ok(usuarioCompleto);
@@ -118,6 +124,47 @@ public class UsuarioController {
         return ResponseEntity.ok(user);
     }
 
+    @PostMapping("/{id}/foto")
+    public ResponseEntity<Map<String, String>> uploadFoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+        try {
+            String url = usuarioService.guardarFoto(id, file);
+            Map<String, String> response = new HashMap<>();
+            response.put("pfp", url);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+
+    @DeleteMapping("/{id}/foto")
+    public ResponseEntity<?> eliminarFoto(@PathVariable Long id) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+
+        if (optionalUsuario.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Usuario no encontrado");
+        }
+
+        Usuario usuario = optionalUsuario.get();
+
+        if (usuario.getPfp() == null || usuario.getPfp().equals("") || usuario.getPfp().equals("null")) {
+            return ResponseEntity.ok(Map.of("message", "El usuario no tiene foto para eliminar"));
+        }
+
+        String rutaFoto = "uploads/users/" + usuario.getPfp();
+
+        File archivo = new File(rutaFoto);
+        if (archivo.exists()) {
+            archivo.delete();
+        }
+
+        usuario.setPfp(null);
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.ok(Map.of("message", "Foto eliminada correctamente"));
+    }
 
 
 }

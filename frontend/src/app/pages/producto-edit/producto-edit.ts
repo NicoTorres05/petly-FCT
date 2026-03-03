@@ -68,7 +68,7 @@ export class ProductoEditPage implements OnInit {
       this.productoService.find(Number(id)).subscribe({
         next: (data) => {
           this.producto = data;
-          console.log('Producto cargado:', data);
+          //console.log('Producto cargado:', data);
           this.productForm.patchValue(data);
         },
         error: (err) => console.error('Error cargando producto', err)
@@ -78,7 +78,6 @@ export class ProductoEditPage implements OnInit {
 
   onSubmit(): void {
 
-    console.log('hola')
     if (this.productForm.invalid) return;
 
     const productoDTO = this.productForm.value;

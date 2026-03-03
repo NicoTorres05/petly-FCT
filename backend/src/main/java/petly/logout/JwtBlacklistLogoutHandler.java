@@ -1,6 +1,6 @@
 package petly.logout;
 
-import petly.token.TokenBlackListService;
+import petly.service.TokenBlackListService;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

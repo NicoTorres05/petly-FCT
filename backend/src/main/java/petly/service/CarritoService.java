@@ -16,6 +16,8 @@ import petly.repository.ProductoRepository;
 import petly.repository.UsuarioRepository;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,22 +69,20 @@ public class CarritoService {
 
 
     private Carrito crearNuevoCarrito(Long userId) {
-        System.out.println("Entrando a crearNuevoCarrito para userId = " + userId);
 
         Carrito carrito = new Carrito();
-        carrito.setUsuario(usuarioRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
-
-        System.out.println("Usuario encontrado: " + carrito.getUsuario().getId());
+        carrito.setUsuario(
+                usuarioRepository.findById(userId)
+                        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"))
+        );
 
         carrito.setEstado(Carrito.Estado.ACTIVO);
         carrito.setPrecioTotal(BigDecimal.ZERO);
+        carrito.setCarProductos(new ArrayList<>());
 
-        Carrito savedCarrito = carritoRepository.save(carrito);
-        System.out.println("Carrito creado con ID: " + savedCarrito.getId());
-
-        return savedCarrito;
+        return carritoRepository.save(carrito);
     }
+
 
 
     public List<Carrito> all() {
@@ -190,9 +190,15 @@ public class CarritoService {
                 .map(item -> item.getPrecio().multiply(BigDecimal.valueOf(item.getCantidad())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+
+        total = total.setScale(2, RoundingMode.HALF_UP);
+
         carrito.setPrecioTotal(total);
         carritoRepository.save(carrito);
 
         return total;
     }
+
+
+
 }

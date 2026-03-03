@@ -59,7 +59,7 @@ export class ProductoDetailPage implements OnInit {
     this.productoService.find(Number(id)).subscribe({
       next: (data) => {
         this.producto = data;
-        console.log('Producto cargado:', data);
+        //console.log('Producto cargado:', data);
         this.loadComentarios();
       },
       error: (err) => {

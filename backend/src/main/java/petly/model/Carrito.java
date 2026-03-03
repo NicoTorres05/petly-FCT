@@ -1,6 +1,7 @@
 package petly.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,8 +29,9 @@ public class Carrito {
     @JsonBackReference
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CarritoProds> carProductos = new ArrayList<>();;
+    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL)
+    private List<CarritoProds> carProductos = new ArrayList<>();
+
 
     @Column(name = "precio_total")
     private BigDecimal precioTotal;
@@ -41,8 +43,7 @@ public class Carrito {
 
     public enum Estado {
         ACTIVO,
-        COMPLETADO,
-        CANCELADO
+        COMPLETADO
     }
 
 

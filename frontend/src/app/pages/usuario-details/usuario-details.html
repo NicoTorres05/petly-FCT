@@ -7,6 +7,9 @@
     <p><strong>Teléfono:</strong> +34 {{ usuario.telefono || '—' }}</p>
     <p><strong>Rol:</strong> {{ usuario.tipo || '—' }}</p>
   </div>
+  <button class="btn-any" [routerLink]="['/usuarios/editar', usuario.id]">
+    Editar
+  </button>
   <button (click)="logout()">
     Cerrar sesión
   </button>

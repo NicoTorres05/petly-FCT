@@ -22,14 +22,12 @@ import java.util.Date;
 public class TokenService {
 
     private final JwtConfig jwtConfig;
-    private final TokenBlacklistService blacklistService;
+    private final TokenBlackListService blacklistService;
 
     public String generateToken(Authentication authentication, String currentToken) {
-
         if (currentToken != null) {
-            blacklistService.blacklistToken(currentToken); // Invalida el token actual
+            blacklistService.blacklistToken(currentToken);
         }
-
         var header = new JWSHeader.Builder(jwtConfig.getAlgorithm())
                 .type(JOSEObjectType.JWT)
                 .build();
@@ -51,7 +49,7 @@ public class TokenService {
         Usuario user = (Usuario) authentication.getPrincipal();
         builder.claim("id", user.getId());
         builder.claim("email", user.getEmail());
-        builder.claim("role", user.getTipo().name());
+        builder.claim("role", user.getRol().name());
 
         var claims = builder.build();
 
@@ -67,5 +65,4 @@ public class TokenService {
         }
         return jwt.serialize();
     }
-
 }

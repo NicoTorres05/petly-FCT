@@ -2,7 +2,7 @@ package petly.seguridad.jwt;
 
 import petly.logout.JwtBlacklistLogoutHandler;
 import petly.repository.UsuarioRepository;
-import petly.token.TokenBlackListService;
+import petly.service.TokenBlackListService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -64,7 +64,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(ar -> ar
                         .requestMatchers(HttpMethod.POST, "/usuarios/login", "/usuarios/register").permitAll()
-                        .requestMatchers("/usuarios/me", "/carrito/**").authenticated()
+                        .requestMatchers("/usuarios/me", "/carrito/**", "/api/mensajes/me").authenticated()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -87,6 +87,8 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 
     @Bean
     AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
@@ -115,5 +117,7 @@ public class SecurityConfig {
     public JwtBlacklistLogoutHandler logoutHandler(TokenBlackListService tokenBlacklistService) {
         return new JwtBlacklistLogoutHandler(tokenBlacklistService);
     }
+
+
 
 }

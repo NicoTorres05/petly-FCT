@@ -8,8 +8,6 @@ import { TokenService } from '../../services/token.service';
 import { UsuarioService } from '../../services/usuario.service';
 import { ActivatedRoute } from '@angular/router';
 
-
-
 @Component({
   selector: 'edit-profile-data',
   standalone: true,
@@ -22,7 +20,6 @@ export class EditProfileData implements OnInit {
   perfilForm!: FormGroup;
   selectedFile: File | null = null;
   usuario: any = null;
-
   previewUrl: string | null = null;
 
   constructor(
@@ -45,7 +42,6 @@ export class EditProfileData implements OnInit {
       saldo: [''],
       pfp: ['']
     });
-
     let userId!: number;
     const routeId = this.route.snapshot.paramMap.get('id');
 
@@ -64,7 +60,6 @@ export class EditProfileData implements OnInit {
       next: (user) => {
         this.usuario = user;
         console.log("Usuario cargado:", user);
-
         this.perfilForm.patchValue({
           nombre: user.nombre,
           email: user.email,
@@ -74,19 +69,15 @@ export class EditProfileData implements OnInit {
           saldo: user.saldo,
           pfp: user.pfp
         });
-
         if (user.pfp) {
           this.previewUrl = 'http://localhost:8080' + user.pfp;
         }
-
       },
       error: (err) => {
         console.error("Error cargando usuario:", err);
       }
     });
   }
-
-
 
   submit(): void {
     console.log(this.perfilForm.value);
@@ -133,21 +124,14 @@ export class EditProfileData implements OnInit {
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
-
     if (!file) return;
-
     this.selectedFile = file;
-
-
     const reader = new FileReader();
     reader.onload = () => {
       this.previewUrl = reader.result as string;
     };
     reader.readAsDataURL(file);
   }
-
-
-
 
   subirFoto() {
     if (!this.selectedFile) return;
@@ -178,6 +162,4 @@ export class EditProfileData implements OnInit {
       }
     });
   }
-
-
 }

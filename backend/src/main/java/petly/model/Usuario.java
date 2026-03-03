@@ -48,11 +48,10 @@ public class Usuario implements UserDetails {
     private String direccion;
 
     @Enumerated(EnumType.STRING)
-    private tipo tipo;
+    private rol rol;
 
-    public enum tipo {
+    public enum rol {
         NORMAL,
-        PREMIUM,
         ADMIN
     }
 
@@ -76,8 +75,7 @@ public class Usuario implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Set.of(new SimpleGrantedAuthority(tipo.name()));
-    }
+        return Set.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));    }
 
     @Override
     @JsonIgnore
